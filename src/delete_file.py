@@ -33,8 +33,8 @@ def lambda_handler(event, context):
         #De la tabla de dynamodb, borramos el item con clave hash 'userId'
         #y sort key filename
         table.delete_item(Key={
-            'userId': username,
-            'filename': filename
+            'UserId': username,
+            'Filename': filename
         })
 
         # Retornamos una respuesta exitosa
