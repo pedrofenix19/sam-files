@@ -185,7 +185,7 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt GetFilesFunction.Arn, '/invocations']]
+        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt PostFilesFunction.Arn, '/invocations']]
 
   DeleteFilesMethod:
     Type: AWS::ApiGateway::Method
@@ -198,7 +198,7 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt GetFilesFunction.Arn, '/invocations']]
+        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt DeleteFilesFunction.Arn, '/invocations']]
 
   # Cognito User Pools Authorizer
   AuthorizersCognitoUserPools:
@@ -222,8 +222,14 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref FilesTable
-        - S3CrudPolicy:
+        - S3ReadPolicy:
             BucketName: !Ref FilesBucket
+        - Version: '2012-10-17' 
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObjectAttributes
+              Resource: !Sub arn:aws:s3:::${FilesBucket}/*
       Environment:
         Variables:
           DYNAMODB_TABLE_NAME: !Ref FilesTable
@@ -334,6 +340,15 @@ Outputs:
   GetFilesFunction:
     Description: "Get Files Lambda Function ARN"
     Value: !GetAtt GetFilesFunction.Arn
+  PostFilesFunction:
+    Description: "Post Files Lambda Function ARN"
+    Value: !GetAtt GetFilesFunction.Arn
+  DeleteFilesFunction:
+    Description: "Delete Files Lambda Function ARN"
+    Value: !GetAtt DeleteFilesFunction.Arn
   GetFilesFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt GetFilesFunctionRole.Arn
+  HostedUIURL:
+    Value: !Sub https://${UserPoolDomain}.auth.${AWS::Region}.amazoncognito.com/oauth2/authorize?client_id=${UserPoolClient}&response_type=token&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fexample.com%2F
+    Description: The hosted UI URL
