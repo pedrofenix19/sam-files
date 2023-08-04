@@ -1,0 +1,339 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  pedrofiles
+
+  Sample SAM Template for pedrofiles
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 128
+
+Resources:
+  FilesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub pedrofiles-${AWS::AccountId}-${AWS::Region}
+
+  FilesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: pedrofilesTable
+      AttributeDefinitions:
+        - AttributeName: UserId
+          AttributeType: S
+        - AttributeName: Filename
+          AttributeType: S
+      KeySchema:
+        - AttributeName: UserId
+          KeyType: HASH
+        - AttributeName: Filename
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5  
+        WriteCapacityUnits: 5  
+
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: pedro-files-user-pool
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      UserAttributeUpdateSettings:
+        AttributesRequireVerificationBeforeUpdate:
+          - email
+      UsernameConfiguration:
+        CaseSensitive: false
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: False
+      AutoVerifiedAttributes:
+        - email
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+      MfaConfiguration: "OFF"
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: True
+
+  UserPoolClient:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+      ClientName: pedro-app-client
+      AccessTokenValidity: 1
+      TokenValidityUnits:
+          AccessToken: hours
+          IdToken: hours
+          RefreshToken: hours
+      AllowedOAuthFlows: 
+        - implicit
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - phone 
+      AuthSessionValidity: 3
+      CallbackURLs:
+        - https://example.com/
+      EnablePropagateAdditionalUserContextData: false
+      EnableTokenRevocation: true
+      ExplicitAuthFlows:
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+      GenerateSecret: false
+      IdTokenValidity: 1
+      PreventUserExistenceErrors: ENABLED
+      ReadAttributes:
+        - address
+        - birthdate
+        - email
+        - email_verified
+        - family_name
+        - gender
+        - given_name
+        - locale
+        - middle_name
+        - name
+        - nickname
+        - phone_number
+        - phone_number_verified
+        - picture
+        - preferred_username
+        - profile
+        - updated_at
+        - website
+        - zoneinfo
+      WriteAttributes:
+        - birthdate
+        - email
+        - family_name
+        - gender
+        - given_name
+        - locale
+        - middle_name
+        - name
+        - nickname
+        - phone_number
+        - picture
+        - preferred_username
+        - profile
+        - updated_at
+        - website
+        - zoneinfo
+      RefreshTokenValidity: 30
+      SupportedIdentityProviders:
+        - COGNITO
+      UserPoolId: !Ref CognitoUserPool
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: 'pedro-filesapi-test-sam'
+      UserPoolId: !Ref CognitoUserPool
+
+  FilesRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: pedro-sam-files-api
+      Description: Files API build with SAM
+
+  FilesResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref FilesRestApi
+      ParentId: !GetAtt 
+        - FilesRestApi
+        - RootResourceId
+      PathPart: files
+
+  GetFilesMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref FilesRestApi
+      ResourceId: !Ref FilesResource
+      HttpMethod: GET
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref AuthorizersCognitoUserPools
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt GetFilesFunction.Arn, '/invocations']]
+
+  PostFilesMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref FilesRestApi
+      ResourceId: !Ref FilesResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref AuthorizersCognitoUserPools
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt GetFilesFunction.Arn, '/invocations']]
+
+  DeleteFilesMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref FilesRestApi
+      ResourceId: !Ref FilesResource
+      HttpMethod: DELETE
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref AuthorizersCognitoUserPools
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt GetFilesFunction.Arn, '/invocations']]
+
+  # Cognito User Pools Authorizer
+  AuthorizersCognitoUserPools:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      Name: CognitoAuthorizer
+      Type: COGNITO_USER_POOLS
+      RestApiId: !Ref FilesRestApi
+      IdentitySource: method.request.header.Authorization
+      ProviderARNs: 
+        - !GetAtt CognitoUserPool.Arn
+
+  GetFilesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: get_files_by_username.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FilesTable
+        - S3CrudPolicy:
+            BucketName: !Ref FilesBucket
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref FilesTable
+          S3_BUCKET_NAME: !Ref FilesBucket
+      Events:
+        Files:
+          Type: Api 
+          Properties:
+            Path: /files
+            Method: get
+
+  PostFilesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: post_file.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FilesTable
+        - S3CrudPolicy:
+            BucketName: !Ref FilesBucket
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref FilesTable
+          S3_BUCKET_NAME: !Ref FilesBucket
+      Events:
+        Files:
+          Type: Api 
+          Properties:
+            Path: /files
+            Method: post
+
+  DeleteFilesFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: delete_file.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FilesTable
+        - S3CrudPolicy:
+            BucketName: !Ref FilesBucket
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref FilesTable
+          S3_BUCKET_NAME: !Ref FilesBucket
+      Events:
+        Files:
+          Type: Api 
+          Properties:
+            Path: /files
+            Method: delete
+
+  # Permission to allow Lambda invocation from API Gateway
+  GetFilesFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetFilesFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${FilesRestApi}/*
+
+  PostFilesFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PostFilesFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${FilesRestApi}/*
+
+  DeleteFilesFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref DeleteFilesFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${FilesRestApi}/*
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+    - GetFilesMethod
+    - PostFilesMethod
+    - DeleteFilesMethod
+    Properties:
+      RestApiId: !Ref FilesRestApi
+  
+  ApiProdStage:  
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      StageName: Prod
+      RestApiId: !Ref FilesRestApi
+      DeploymentId: !Ref ApiDeployment
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  FilesApi:
+    Description: "API Gateway endpoint URL for Prod stage for Files function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/files/"
+  GetFilesFunction:
+    Description: "Get Files Lambda Function ARN"
+    Value: !GetAtt GetFilesFunction.Arn
+  GetFilesFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt GetFilesFunctionRole.Arn
