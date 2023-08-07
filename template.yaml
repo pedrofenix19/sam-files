@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  pedrofiles
+  Files API
 
-  Sample SAM Template for pedrofiles
+  Sample SAM Template for files API
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -11,16 +11,21 @@ Globals:
     Timeout: 30
     MemorySize: 128
 
+Parameters:
+  StudentName:
+    Type: String
+    Description: Nombre del estudiante.
+
 Resources:
   FilesBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub pedrofiles-${AWS::AccountId}-${AWS::Region}
+      BucketName: !Sub ${StudentName}files-${AWS::AccountId}-${AWS::Region}
 
   FilesTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: pedrofilesTable
+      TableName: !Sub ${StudentName}filesTable
       AttributeDefinitions:
         - AttributeName: UserId
           AttributeType: S
@@ -38,7 +43,7 @@ Resources:
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: pedro-files-user-pool
+      UserPoolName: !Sub ${StudentName}-files-user-pool
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -74,7 +79,7 @@ Resources:
   UserPoolClient:
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: pedro-app-client
+      ClientName: !Sub ${StudentName}-app-client
       AccessTokenValidity: 1
       TokenValidityUnits:
           AccessToken: hours
@@ -143,13 +148,13 @@ Resources:
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: 'pedro-filesapi-test-sam'
+      Domain: !Sub ${StudentName}-filesapi-test-sam
       UserPoolId: !Ref CognitoUserPool
 
   FilesRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: pedro-sam-files-api
+      Name: !Sub ${StudentName}-sam-files-api
       Description: Files API build with SAM
 
   FilesResource:

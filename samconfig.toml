@@ -21,6 +21,7 @@ s3_prefix = "pedrofiles-sam"
 region = "us-east-1"
 image_repositories = []
 stack_name = "pedrofiles-sam"
+parameter_overrides = "StudentName=\"pedro\""
 
 [default.package.parameters]
 resolve_s3 = true
