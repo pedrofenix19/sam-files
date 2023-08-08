@@ -344,7 +344,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   FilesApi:
     Description: "API Gateway endpoint URL for Prod stage for Files function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/files/"
+    Value: !Sub "https://${FilesRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/files/"
   GetFilesFunction:
     Description: "Get Files Lambda Function ARN"
     Value: !GetAtt GetFilesFunction.Arn
