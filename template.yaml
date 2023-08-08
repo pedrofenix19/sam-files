@@ -245,6 +245,7 @@ Resources:
           Properties:
             Path: /files
             Method: get
+            RestApiId: !Ref FilesRestApi
 
   PostFilesFunction:
     Type: AWS::Serverless::Function 
@@ -269,6 +270,7 @@ Resources:
           Properties:
             Path: /files
             Method: post
+            RestApiId: !Ref FilesRestApi
 
   DeleteFilesFunction:
     Type: AWS::Serverless::Function 
@@ -293,6 +295,7 @@ Resources:
           Properties:
             Path: /files
             Method: delete
+            RestApiId: !Ref FilesRestApi
 
   # Permission to allow Lambda invocation from API Gateway
   GetFilesFunctionPermission:
