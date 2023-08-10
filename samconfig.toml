@@ -27,7 +27,7 @@ parameter_overrides = "StudentName=\"pedro\""
 resolve_s3 = true
 
 [default.sync.parameters]
-watch = true
+watch = false
 
 [default.local_start_api.parameters]
 warm_containers = "EAGER"

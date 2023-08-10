@@ -229,6 +229,8 @@ Resources:
             TableName: !Ref FilesTable
         - S3ReadPolicy:
             BucketName: !Ref FilesBucket
+        - SQSSendMessagePolicy:
+            QueueName: 'pedro-clase'
         - Version: '2012-10-17' 
           Statement:
             - Effect: Allow

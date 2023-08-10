@@ -5,13 +5,17 @@ import os
 
 S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
 TABLE_NAME = os.environ['DYNAMODB_TABLE_NAME']
+SQS_QUEUE_URL = 'https://sqs.us-east-1.amazonaws.com/280023753708/pedro-clase'
+
+# Create SQS client
+sqs = boto3.client('sqs')
+s3 = boto3.client('s3')
+#Creamos el recurso dynamodb
+dynamodb = boto3.resource('dynamodb')
 
 def lambda_handler(event, context):
     print(event)
-    #Creamos el recurso dynamodb
-    dynamodb = boto3.resource('dynamodb')
-    s3 = boto3.client('s3')
-    
+
     #Creamos el objeto tabla de DynamoDB
     table = dynamodb.Table(TABLE_NAME)
 
@@ -80,6 +84,18 @@ def lambda_handler(event, context):
             #Añadimos el objeto armado en la lista de objetos
             #a retornar por la api
             response_body.append(response_item)
+
+            ##Se env'ia el mensaje a la cola SQS
+            message = {
+                "message": f"Archivo {response_item['filename']} de tamano {response_item['filesize']}"
+            }
+
+            response = sqs.send_message(
+                QueueUrl=SQS_QUEUE_URL,
+                DelaySeconds=0,
+                MessageBody=json.dumps(message)
+            )
+
         
         #Retornamos una respuesta exitosa
         return {
