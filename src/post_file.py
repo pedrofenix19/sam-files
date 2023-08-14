@@ -11,7 +11,7 @@ DYNAMODB_TABLE_NAME = os.environ['DYNAMODB_TABLE_NAME']
 
 def lambda_handler(event, context):
     try:
-        print(event)
+        print(json.dumps(event))
         # Obtenemos el nombre de usuario, el nombre del archivo 
         #y el contenido del mismo en base64
         username = event['requestContext']['authorizer']['claims']['cognito:username']

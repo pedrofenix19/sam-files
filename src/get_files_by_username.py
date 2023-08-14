@@ -14,7 +14,7 @@ s3 = boto3.client('s3')
 dynamodb = boto3.resource('dynamodb')
 
 def lambda_handler(event, context):
-    print(event)
+    print(json.dumps(event))
 
     #Creamos el objeto tabla de DynamoDB
     table = dynamodb.Table(TABLE_NAME)

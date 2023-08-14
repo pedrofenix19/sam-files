@@ -80,7 +80,7 @@ Resources:
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
       ClientName: !Sub ${StudentName}-app-client
-      AccessTokenValidity: 1
+      AccessTokenValidity: 4
       TokenValidityUnits:
           AccessToken: hours
           IdToken: hours
@@ -101,7 +101,7 @@ Resources:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
       GenerateSecret: false
-      IdTokenValidity: 1
+      IdTokenValidity: 4
       PreventUserExistenceErrors: ENABLED
       ReadAttributes:
         - address

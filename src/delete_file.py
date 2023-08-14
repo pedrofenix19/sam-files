@@ -9,6 +9,7 @@ S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
 DYNAMODB_TABLE_NAME = os.environ['DYNAMODB_TABLE_NAME']
 
 def lambda_handler(event, context):
+    print(json.dumps(event))
     try:
         # Extraemos el nombre de usuario de la data retornada por Cognito
         username = event['requestContext']['authorizer']['claims']['cognito:username']

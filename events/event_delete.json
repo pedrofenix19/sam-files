@@ -1,0 +1,144 @@
+{
+    "resource": "/files",
+    "path": "/files/",
+    "httpMethod": "DELETE",
+    "headers": {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": "eyJraWQiOiI0U1hJUFwvRm5rSnZCRTVvVzFFamF1bE1VS3REb2N1TUVMYnBWY2tNUVFhYz0iLCJhbGciOiJSUzI1NiJ9.eyJhdF9oYXNoIjoiYlRvSTM0Q2JSWk5PMEF6em1qOHF0QSIsInN1YiI6IjNiMTI0ZTc0LWVmNDEtNDE3Ni1hOWI3LTMzYThkMzdmMTg4ZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9ERldUVDlORnEiLCJjb2duaXRvOnVzZXJuYW1lIjoicGVkcm8iLCJhdWQiOiIyMGJpYjNnajE5NzBzZDhycjRrMjNmdHZxIiwiZXZlbnRfaWQiOiJkNWZkNDBlNi0wYTEwLTRhMjAtOGE5My0wYjQwMGQxZjljODEiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTY5MjA0NjE2OCwiZXhwIjoxNjkyMDYwNTY4LCJpYXQiOjE2OTIwNDYxNjksImp0aSI6IjIzYWFhYjFiLTVhNGEtNGUwZS1iZmUwLWJjNzBmN2FlOWYwNiIsImVtYWlsIjoiZGpiZDFpcjFhMEBoYXBweTIwMjN5ZWFyLmNvbSJ9.u1Gr87NE7ngL0ntArA_CYioB1Tz4T6PzevCX_N6FE2pIDfhqlzcCLTkd9jQCX8xKipCwSVWjFkwCzjU0oND18W_EnLiWqF8t_WClBelVb2-hKZf5Q4FMFpa8AwG_GDI2s0_tXGb0wiiTWB5js2L8B14SCHEuPDcwmSe_083FSjABL3b35ajIo0UHkeeys5o68lAnia2Wl0ocwqfLEvjRuXWpYKL0vAnZj9JUAgYQUgnwcPe1oDjILSk8D-N5608qgvHNXcPFVkAXtfNVhTRC44LFOwX1_MOalfdo6_3Jm-UxP-NJrlPORf8URWA4vOnvk5JIthQirX2_A1Ems3xa3g",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-ASN": "12479",
+        "CloudFront-Viewer-Country": "ES",
+        "Host": "ervvboawz3.execute-api.us-east-1.amazonaws.com",
+        "Postman-Token": "cf4caf96-1fa0-48dc-a340-a64a820aa594",
+        "User-Agent": "PostmanRuntime/7.32.3",
+        "Via": "1.1 b426927ea90bee6f5804d316b855b47c.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "kJHOZ8JD1-SARUWyYuYZ1by-5DSMK4TnvzKTXi_II9dvVDMS7v-kNw==",
+        "X-Amzn-Trace-Id": "Root=1-64da941d-47e3514359c492d70fc9854f",
+        "X-Forwarded-For": "80.102.36.32, 15.158.31.81",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "Accept": [
+            "*/*"
+        ],
+        "Accept-Encoding": [
+            "gzip, deflate, br"
+        ],
+        "Authorization": [
+            "eyJraWQiOiI0U1hJUFwvRm5rSnZCRTVvVzFFamF1bE1VS3REb2N1TUVMYnBWY2tNUVFhYz0iLCJhbGciOiJSUzI1NiJ9.eyJhdF9oYXNoIjoiYlRvSTM0Q2JSWk5PMEF6em1qOHF0QSIsInN1YiI6IjNiMTI0ZTc0LWVmNDEtNDE3Ni1hOWI3LTMzYThkMzdmMTg4ZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9ERldUVDlORnEiLCJjb2duaXRvOnVzZXJuYW1lIjoicGVkcm8iLCJhdWQiOiIyMGJpYjNnajE5NzBzZDhycjRrMjNmdHZxIiwiZXZlbnRfaWQiOiJkNWZkNDBlNi0wYTEwLTRhMjAtOGE5My0wYjQwMGQxZjljODEiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTY5MjA0NjE2OCwiZXhwIjoxNjkyMDYwNTY4LCJpYXQiOjE2OTIwNDYxNjksImp0aSI6IjIzYWFhYjFiLTVhNGEtNGUwZS1iZmUwLWJjNzBmN2FlOWYwNiIsImVtYWlsIjoiZGpiZDFpcjFhMEBoYXBweTIwMjN5ZWFyLmNvbSJ9.u1Gr87NE7ngL0ntArA_CYioB1Tz4T6PzevCX_N6FE2pIDfhqlzcCLTkd9jQCX8xKipCwSVWjFkwCzjU0oND18W_EnLiWqF8t_WClBelVb2-hKZf5Q4FMFpa8AwG_GDI2s0_tXGb0wiiTWB5js2L8B14SCHEuPDcwmSe_083FSjABL3b35ajIo0UHkeeys5o68lAnia2Wl0ocwqfLEvjRuXWpYKL0vAnZj9JUAgYQUgnwcPe1oDjILSk8D-N5608qgvHNXcPFVkAXtfNVhTRC44LFOwX1_MOalfdo6_3Jm-UxP-NJrlPORf8URWA4vOnvk5JIthQirX2_A1Ems3xa3g"
+        ],
+        "CloudFront-Forwarded-Proto": [
+            "https"
+        ],
+        "CloudFront-Is-Desktop-Viewer": [
+            "true"
+        ],
+        "CloudFront-Is-Mobile-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-SmartTV-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-Tablet-Viewer": [
+            "false"
+        ],
+        "CloudFront-Viewer-ASN": [
+            "12479"
+        ],
+        "CloudFront-Viewer-Country": [
+            "ES"
+        ],
+        "Host": [
+            "ervvboawz3.execute-api.us-east-1.amazonaws.com"
+        ],
+        "Postman-Token": [
+            "cf4caf96-1fa0-48dc-a340-a64a820aa594"
+        ],
+        "User-Agent": [
+            "PostmanRuntime/7.32.3"
+        ],
+        "Via": [
+            "1.1 b426927ea90bee6f5804d316b855b47c.cloudfront.net (CloudFront)"
+        ],
+        "X-Amz-Cf-Id": [
+            "kJHOZ8JD1-SARUWyYuYZ1by-5DSMK4TnvzKTXi_II9dvVDMS7v-kNw=="
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-64da941d-47e3514359c492d70fc9854f"
+        ],
+        "X-Forwarded-For": [
+            "80.102.36.32, 15.158.31.81"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "queryStringParameters": {
+        "filename": "test.txt"
+    },
+    "multiValueQueryStringParameters": {
+        "filename": [
+            "test.txt"
+        ]
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "1k8nae",
+        "authorizer": {
+            "claims": {
+                "at_hash": "bToI34CbRZNO0Azzmj8qtA",
+                "sub": "3b124e74-ef41-4176-a9b7-33a8d37f188e",
+                "email_verified": "true",
+                "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_DFWTT9NFq",
+                "cognito:username": "pedro",
+                "aud": "20bib3gj1970sd8rr4k23ftvq",
+                "event_id": "d5fd40e6-0a10-4a20-8a93-0b400d1f9c81",
+                "token_use": "id",
+                "auth_time": "1692046168",
+                "exp": "Tue Aug 15 00:49:28 UTC 2023",
+                "iat": "Mon Aug 14 20:49:29 UTC 2023",
+                "jti": "23aaab1b-5a4a-4e0e-bfe0-bc70f7ae9f06",
+                "email": "djbd1ir1a0@happy2023year.com"
+            }
+        },
+        "resourcePath": "/files",
+        "httpMethod": "DELETE",
+        "extendedRequestId": "JqwUlGoSoAMFwqw=",
+        "requestTime": "14/Aug/2023:20:52:45 +0000",
+        "path": "/Prod/files/",
+        "accountId": "280023753708",
+        "protocol": "HTTP/1.1",
+        "stage": "Prod",
+        "domainPrefix": "ervvboawz3",
+        "requestTimeEpoch": 1692046365094,
+        "requestId": "1724f231-14c7-42e4-a2c7-cf6188813297",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "accountId": null,
+            "cognitoIdentityId": null,
+            "caller": null,
+            "sourceIp": "80.102.36.32",
+            "principalOrgId": null,
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "PostmanRuntime/7.32.3",
+            "user": null
+        },
+        "domainName": "ervvboawz3.execute-api.us-east-1.amazonaws.com",
+        "apiId": "ervvboawz3"
+    },
+    "body": null,
+    "isBase64Encoded": false
+}
